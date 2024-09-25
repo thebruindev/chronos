@@ -14,7 +14,7 @@ export const taskObject = v.object({
     status: v.string(),
     daysEstimation: v.number(),
     goalId: v.id("goals"),
-    _updateTime: v.string()
+    lastUpdatedAt: v.string()
 });
 
 export type TaskObject = Infer<typeof taskObject>
@@ -38,7 +38,7 @@ export const createTask = mutation({
         complexity: args.complexity,
         daysEstimation: args.daysEstimation,
         goalId: args.goalId,
-        _updateTime: args._updateTime
+        lastUpdatedAt: args.lastUpdatedAt
     });
   },
 });

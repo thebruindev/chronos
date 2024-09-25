@@ -9,7 +9,8 @@ export default defineSchema({
     priority: v.string(),
     startDate: v.optional(v.string()),
     dueDate: v.optional(v.string()),
-    completedAt: v.optional(v.string())
+    completedAt: v.optional(v.string()),
+    lastUpdatedAt: v.optional(v.string()),
   }),
   tasks: defineTable({
     title: v.string(),
@@ -17,18 +18,13 @@ export default defineSchema({
     priority: v.string(),
     category: v.string(),
     complexity: v.union(
-        v.literal("simple"),
-        v.literal("medium"),
-        v.literal("complex"),
-      ),
+      v.literal("simple"),
+      v.literal("medium"),
+      v.literal("complex")
+    ),
     status: v.string(),
     daysEstimation: v.number(),
     goalId: v.id("goals"),
-    _updateTime: v.string()
+    lastUpdatedAt: v.optional(v.string()),
   }),
-  users: defineTable({
-    first_name: v.string(),
-    last_name: v.string(),
-    tokenIdentifier: v.string(),
-  }).index("by_token", ["tokenIdentifier"]),
 });
