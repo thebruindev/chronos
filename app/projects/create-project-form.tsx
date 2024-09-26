@@ -9,27 +9,23 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { UploadProjectForm } from "./upload-project-form";
 import { useState } from "react";
-import { Doc } from "@/convex/_generated/dataModel";
-import { UploadGoalForm } from "./upload-goal-form";
 
-export function CreateGoalButton(props: { project: Doc<"projects"> }) {
+export function CreateProjectButton() {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <Dialog onOpenChange={setIsOpen} open={isOpen}>
       <DialogTrigger asChild>
-        <Button>Upload Goal</Button>
+        <Button>Upload Project</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Upload a Goal</DialogTitle>
+          <DialogTitle>Upload a Project</DialogTitle>
           <DialogDescription>
-            Upload a team Goal for you to search over in the future.
+            Upload a project for you to search over in the future.
           </DialogDescription>
-          <UploadGoalForm
-            project={props.project}
-            onUpload={() => setIsOpen(false)}
-          />
+          <UploadProjectForm onUpload={() => setIsOpen(false)} />
         </DialogHeader>
       </DialogContent>
     </Dialog>

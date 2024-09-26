@@ -14,6 +14,7 @@ export const taskObject = v.object({
     status: v.string(),
     daysEstimation: v.number(),
     goalId: v.id("goals"),
+    projectId: v.id("projects"),
     lastUpdatedAt: v.string()
 });
 
@@ -38,7 +39,8 @@ export const createTask = mutation({
         complexity: args.complexity,
         daysEstimation: args.daysEstimation,
         goalId: args.goalId,
-        lastUpdatedAt: args.lastUpdatedAt
+        lastUpdatedAt: args.lastUpdatedAt,
+        projectId: args.projectId
     });
   },
 });

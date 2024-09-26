@@ -13,44 +13,32 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import { Doc, Id } from "@/convex/_generated/dataModel";
 
-const goalFormSchema = z.object({
+const projectFormSchema = z.object({
   title: z.string().min(1).max(520),
   description: z.string().min(1).max(520),
-  status: z.string(),
-  priority: z.string(),
-  startDate: z.string().optional(),
-  dueDate: z.string().optional(),
-  completedAt: z.string().optional(),
-  projectId: z.string()
+  lastUpdatedAt: z.string().optional(),
 });
 
-
-type FormSchema = z.infer<typeof goalFormSchema>;
-interface UploadGoalFormProps {
-  project: Doc<"projects">
+type FormSchema = z.infer<typeof projectFormSchema>;
+interface UploadProjectFormProps {
   onUpload: () => void;
 }
 
-export function UploadGoalForm({ onUpload, project }: UploadGoalFormProps) {
-  const createGoal = useMutation(api.goals.createGoal);
+export function UploadProjectForm({ onUpload }: UploadProjectFormProps) {
+  const createProject = useMutation(api.projects.createProject);
   const form = useForm<FormSchema>({
-    resolver: zodResolver(goalFormSchema),
+    resolver: zodResolver(projectFormSchema),
     defaultValues: {
       title: "",
       description: "",
-      status: "",
-      priority: "",
-      projectId: project._id
+      lastUpdatedAt: undefined,
     },
   });
 
   async function onSubmit(values: FormSchema) {
-     // Manually convert projectId string to a Convex Id<"projects"> type
-     const validProjectId = values.projectId as Id<"projects">;
     console.log(values);
-    await createGoal({...values, projectId: validProjectId});
+    await createProject(values);
     onUpload();
   }
 
@@ -82,34 +70,6 @@ export function UploadGoalForm({ onUpload, project }: UploadGoalFormProps) {
                   placeholder="Ex: Refactor create and update task modals"
                   {...field}
                 />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="status"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Status</FormLabel>
-              <FormControl>
-                <Input placeholder="Ex: not started" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="priority"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Priority</FormLabel>
-              <FormControl>
-                <Input placeholder="Ex: top-priority" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

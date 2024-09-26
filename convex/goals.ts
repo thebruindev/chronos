@@ -10,6 +10,7 @@ export const goalObject = v.object({
   dueDate: v.optional(v.string()),
   completedAt: v.optional(v.string()),
   lastUpdatedAt: v.optional(v.string()),
+  projectId: v.id("projects")
 });
 
 export type GoalObject = Infer<typeof goalObject>
@@ -32,7 +33,8 @@ export const createGoal = mutation({
       startDate: args.startDate,
       dueDate: args.dueDate,
       completedAt: args.completedAt,
-      lastUpdatedAt: args.lastUpdatedAt
+      lastUpdatedAt: args.lastUpdatedAt,
+      projectId: args.projectId
     });
   },
 });
