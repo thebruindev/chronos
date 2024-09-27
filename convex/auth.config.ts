@@ -2,7 +2,7 @@
 export default {
   providers: [
     {
-      domain: "https://set-crawdad-53.clerk.accounts.dev",
+      domain: process.env.CONVEX_DOMAIN_URL,
       applicationID: "convex",
     },
   ]

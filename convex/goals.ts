@@ -10,21 +10,24 @@ export const goalObject = v.object({
   dueDate: v.optional(v.string()),
   completedAt: v.optional(v.string()),
   lastUpdatedAt: v.optional(v.string()),
-  projectId: v.id("projects")
+  projectId: v.id("projects"),
 });
 
-export type GoalObject = Infer<typeof goalObject>
+export type GoalObject = Infer<typeof goalObject>;
 
-export const getGoals = query({
-  async handler(ctx) {
-    return await ctx.db.query("goals").collect();
+export const getGoalsByProjectId = query({
+  args: { projectId: v.id("projects") },
+  async handler(ctx, args) {
+    return await ctx.db
+      .query("goals")
+      .filter((q) => q.eq(q.field("projectId"), args.projectId))
+      .collect();
   },
 });
 
 export const createGoal = mutation({
   args: goalObject,
   async handler(ctx, args) {
-    
     await ctx.db.insert("goals", {
       title: args.title,
       description: args.description,
@@ -34,7 +37,7 @@ export const createGoal = mutation({
       dueDate: args.dueDate,
       completedAt: args.completedAt,
       lastUpdatedAt: args.lastUpdatedAt,
-      projectId: args.projectId
+      projectId: args.projectId,
     });
   },
 });
