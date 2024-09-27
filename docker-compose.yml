@@ -1,0 +1,10 @@
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"  # Expose Next.js on localhost:3000
+    env_file:
+      - .env  # Loads environment variables from .env file
+    volumes:
+      - .:/app  # Mounts local app directory into the container for live changes
+    command: npm run dev
