@@ -197,7 +197,7 @@ This project utilizes several key technologies. Below are links to the official 
 - [**Node.js**](https://nodejs.org/en/docs/) – The JavaScript runtime used to run the server-side code.
 - [**NPM**](https://docs.npmjs.com/) – The package manager for JavaScript, used to manage dependencies.
 
-Feel free to refer to these resources as you work on the project to get the most out of the tools we're using!
+Feel free to refer to these resources as you work on the project to get the most out of the tools we're using
 
 ## Deploy on Vercel
 
