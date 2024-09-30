@@ -3,8 +3,8 @@ import React from 'react'
 
 export default function Box(props: { goal: Doc<"goals">}) {
   return (
-    <div className='my-4 py-4 mx-4 h-full w-auto border border-indigo-300' >
-      <p>{props.goal.title}</p>
+    <div className='my-4 py-4 mx-4 border border-[#05201D] dark:border-[#57E1C0] rounded' >
+      <p className='text-center'>{props.goal.title}</p>
     </div>
   )
 }
