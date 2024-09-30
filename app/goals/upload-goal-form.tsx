@@ -23,13 +23,12 @@ const goalFormSchema = z.object({
   startDate: z.string().optional(),
   dueDate: z.string().optional(),
   completedAt: z.string().optional(),
-  projectId: z.string()
+  projectId: z.string(),
 });
-
 
 type FormSchema = z.infer<typeof goalFormSchema>;
 interface UploadGoalFormProps {
-  project: Doc<"projects">
+  project: Doc<"projects">;
   onUpload: () => void;
 }
 
@@ -42,27 +41,27 @@ export function UploadGoalForm({ onUpload, project }: UploadGoalFormProps) {
       description: "",
       status: "",
       priority: "",
-      projectId: project._id
+      projectId: project._id,
     },
   });
 
   async function onSubmit(values: FormSchema) {
-     // Manually convert projectId string to a Convex Id<"projects"> type
-     const validProjectId = values.projectId as Id<"projects">;
+    // Manually convert projectId string to a Convex Id<"projects"> type
+    const validProjectId = values.projectId as Id<"projects">;
     console.log(values);
-    await createGoal({...values, projectId: validProjectId});
+    await createGoal({ ...values, projectId: validProjectId });
     onUpload();
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 ">
         <FormField
           control={form.control}
           name="title"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Title</FormLabel>
+              <FormLabel>Title </FormLabel>
               <FormControl>
                 <Input placeholder="Ex: Frontend Refactor" {...field} />
               </FormControl>
@@ -115,7 +114,7 @@ export function UploadGoalForm({ onUpload, project }: UploadGoalFormProps) {
             </FormItem>
           )}
         />
-        <Button type="submit">Upload</Button>
+        <Button type="submit" variant={"teal"}>Upload</Button>
       </form>
     </Form>
   );

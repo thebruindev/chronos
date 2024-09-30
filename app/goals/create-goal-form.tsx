@@ -18,12 +18,12 @@ export function CreateGoalButton(props: { project: Doc<"projects"> }) {
   return (
     <Dialog onOpenChange={setIsOpen} open={isOpen}>
       <DialogTrigger asChild>
-        <Button>Upload Goal</Button>
+        <Button variant={'teal'} className="font-bold">Upload Goal</Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] ">
         <DialogHeader>
           <DialogTitle>Upload a Goal</DialogTitle>
-          <DialogDescription>
+          <DialogDescription className="">
             Upload a team Goal for you to search over in the future.
           </DialogDescription>
           <UploadGoalForm

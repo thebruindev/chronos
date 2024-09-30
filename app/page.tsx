@@ -10,7 +10,7 @@ export default function Home() {
   return (
     <main className="p-24 space-y-8">
       <div className="flex justify-between items-center">
-        <h1 className="text-4xl font-bold">My Projects</h1>
+        <h1 className="ml-2 text-4xl font-bold text-[#005A4E] dark:text-[#DBF9FF] border-b-4 border-[#57E1C0]">My Projects</h1>
         <CreateProjectButton/>
       </div>
 
