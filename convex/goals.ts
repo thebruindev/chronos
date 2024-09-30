@@ -13,6 +13,17 @@ export const goalObject = v.object({
   projectId: v.id("projects"),
 });
 
+export const goalObjectToUpdate = v.object({
+  title: v.optional(v.string()),
+  description: v.optional(v.string()),
+  status: v.optional(v.string()),
+  priority: v.optional(v.string()),
+  startDate: v.optional(v.string()),
+  dueDate: v.optional(v.string()),
+  completedAt: v.optional(v.string()),
+  lastUpdatedAt: v.optional(v.string()),
+});
+
 export type GoalObject = Infer<typeof goalObject>;
 
 export const getGoalsByProjectId = query({
@@ -41,3 +52,21 @@ export const createGoal = mutation({
     });
   },
 });
+
+//TODO: updating with convex
+
+// export const updateGoalById = mutation({
+//   args: goalObjectToUpdate,
+//   async handler(ctx, args) {
+//     return await ctx.db.patch("goals", {
+//       title: args.title,
+//       description: args.description,
+//       status: args.status,
+//       priority: args.priority,
+//       startDate: args.startDate,
+//       dueDate: args.dueDate,
+//       completedAt: args.completedAt,
+//       lastUpdatedAt: args.lastUpdatedAt,
+//     });
+//   },
+// });

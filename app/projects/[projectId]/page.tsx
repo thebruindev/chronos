@@ -1,13 +1,15 @@
 "use client";
 
 import { CreateGoalButton } from "@/app/goals/create-goal-form";
-import Box from "@/components/box";
+import { GoalCard } from "@/app/goals/goalCard";
+import Stack from "@/components/stack";
+import { Button } from "@/components/ui/button";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { useQuery } from "convex/react";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
-
+import { ExitIcon } from "@radix-ui/react-icons";
 
 export default function Page() {
   const { projectId } = useParams();
@@ -22,11 +24,11 @@ export default function Page() {
     projectId: validProjectId as Id<"projects">,
   });
 
-  const router = useRouter()
+  const router = useRouter();
 
   const goToHomePage = () => {
-    router.push('/')
-  }
+    router.push("/");
+  };
 
   // Use the useQuery hook with the "skip" option in the second argument if the projectId is invalid
   const project = useQuery(
@@ -52,17 +54,21 @@ export default function Page() {
   return (
     <main className="p-24 space-y-8">
       <div className="">
-        <h1 className="text-4xl font-bold">{project.title}</h1>
+        <Button variant={"teal"} className="font-bold" onClick={() => goToHomePage()}>
+          Back to projects <ExitIcon className="ml-2 h-4 w-4" />
+        </Button>
+        <Stack direction="row">
+        <h1 className="text-4xl font-bold py-4 text-[#005A4E] dark:text-[#DBF9FF]">{project.title} - Goals</h1>
+        </Stack>
+        
         <p>{project.description}</p>
-        <CreateGoalButton project={project} />
-        Here are the goals for this project
-        <div className="flex items-center ">
-          {goals?.map((goal) => <Box key={goal._id} goal={goal} />)}
-        </div>
-        <div onClick={() => goToHomePage()} className="bg-indigo-200 size-8  rounded-full text-center py-1">
-          {" "}
-          +{" "}
-        </div>
+        <Stack direction="row" justify="space-between" className="pt-4">
+          <p>Filter section here</p>
+          <CreateGoalButton project={project} />
+        </Stack>
+        <Stack className="py-2" direction="column" spacing={6}>
+          {goals?.map((goal) => <GoalCard key={goal._id} goal={goal} />)}
+        </Stack>
       </div>
     </main>
   );

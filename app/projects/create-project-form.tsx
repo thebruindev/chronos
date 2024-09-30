@@ -17,7 +17,7 @@ export function CreateProjectButton() {
   return (
     <Dialog onOpenChange={setIsOpen} open={isOpen}>
       <DialogTrigger asChild>
-        <Button>Upload Project</Button>
+        <Button variant={"teal"}>Upload Project</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
