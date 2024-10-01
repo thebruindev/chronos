@@ -10,6 +10,7 @@ import { useQuery } from "convex/react";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { ExitIcon } from "@radix-ui/react-icons";
+import Image from "next/image";
 
 export default function Page() {
   const { projectId } = useParams();
@@ -54,20 +55,36 @@ export default function Page() {
   return (
     <main className="p-24 space-y-8">
       <div className="">
-        <Button variant={"teal"} className="font-bold" onClick={() => goToHomePage()}>
+        <Button
+          variant={"teal"}
+          className="font-bold"
+          onClick={() => goToHomePage()}
+        >
           Back to projects <ExitIcon className="ml-2 h-4 w-4" />
         </Button>
         <Stack direction="row">
-        <h1 className="text-4xl font-bold py-4 text-[#005A4E] dark:text-[#DBF9FF]">{project.title} - Goals</h1>
+          <h1 className="text-4xl font-bold py-4 text-[#005A4E] dark:text-[#DBF9FF]">
+            {project.title} - Goals
+          </h1>
         </Stack>
-        
+
         <p>{project.description}</p>
         <Stack direction="row" justify="space-between" className="pt-4">
           <p>Filter section here</p>
-          <CreateGoalButton project={project} />
+          <CreateGoalButton project={project} action="create" />
         </Stack>
         <Stack className="py-2" direction="column" spacing={6}>
-          {goals?.map((goal) => <GoalCard key={goal._id} goal={goal} />)}
+          {goals && goals.length < 1 ? (
+            <div className="flex flex-col items-center justify-center h-screen">
+              <Image alt="plant" src="/plant.png" width={300} height={300} />
+              <p>
+                Looks like you don&apos;t have any goals yet, you could upload one by
+                clicking the button above
+              </p>
+            </div>
+          ) : (
+            goals?.map((goal) => <GoalCard key={goal._id} goal={goal} />)
+          )}
         </Stack>
       </div>
     </main>

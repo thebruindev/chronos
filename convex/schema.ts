@@ -6,7 +6,8 @@ export default defineSchema({
     title: v.string(),
     description: v.string(),
     lastUpdatedAt: v.optional(v.string()),
-  }),
+    tokenIdentifier: v.string()
+  }).index('by_tokenIdentifier', ['tokenIdentifier']),
   goals: defineTable({
     title: v.string(),
     description: v.string(),
