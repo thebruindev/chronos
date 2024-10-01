@@ -11,24 +11,37 @@ export type ProjectObject = Infer<typeof projectObject>;
 
 export const getProjects = query({
   async handler(ctx) {
-    return await ctx.db.query("projects").collect();
+    const userId = (await ctx.auth.getUserIdentity())?.tokenIdentifier;
+    if (!userId) {
+      return []
+    }
+
+    return await ctx.db
+      .query("projects")
+      .withIndex("by_tokenIdentifier", (q) => q.eq("tokenIdentifier", userId))
+      .collect();
   },
 });
 
 export const getProjectById = query({
-    args: { projectId: v.id("projects")},
-    async handler(ctx, args) {
-      return await ctx.db.get(args.projectId)
-    },
-  });
+  args: { projectId: v.id("projects") },
+  async handler(ctx, args) {
+    return await ctx.db.get(args.projectId);
+  },
+});
 
 export const createProject = mutation({
   args: projectObject,
   async handler(ctx, args) {
+    const userId = (await ctx.auth.getUserIdentity())?.tokenIdentifier;
+    if (!userId) {
+      throw new Error("Unauthenticated call to mutation");
+    }
     await ctx.db.insert("projects", {
       title: args.title,
       description: args.description,
       lastUpdatedAt: args.lastUpdatedAt,
+      tokenIdentifier: userId,
     });
   },
 });
