@@ -104,3 +104,18 @@ Project: Build Task Manager in Nodejs
 | call IT service           | respond to email          | fill new Resume               | Fill replicon info      |
 ```
 
+
+TODO: when clicking on a project, right now we get all the goals but eventually I want to first click on a project and be redirectd to a page where I have :
+
+- a grid of two items:
+    - a sort of paper of 4 spaces that acts as a fixed drawer and enables us to choose either a sprint/period, to choose a goal and later maybe more.
+
+    - another grid that takes the remaining 8 spaces and is the content we are looking for:
+        - in the case of clicking on goals: we get a paginated lists of all our goals and can crud it w/ filtering
+        - in the case of clicking on period: we get a jira like 4/5 columns about the progression of my tasks
+        - in the case of clicking on insight: we get a graph that shows us data about our progress (to refine)
+
+
+TODO: add a graphs that shows you insight on the tasks that you completed in time, what you are late about
+
+
