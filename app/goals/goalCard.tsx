@@ -3,6 +3,25 @@ import { Doc } from "@/convex/_generated/dataModel";
 import { formatUTCDateToDateString } from "@/utils/dates";
 import { UpdateGoalButton } from "./update-goal-button";
 import { DeleteGoalButton } from "./delete-goal-button";
+import Chip, { ResultValuesMap } from "@/components/chip";
+import { CheckCircledIcon, UpdateIcon, CircleIcon } from "@radix-ui/react-icons";
+
+export type progressStatusValuesMap = "Completed" | "In Progress" | "To Do";
+
+export const progressStatusIcon: Record<
+  progressStatusValuesMap,
+  React.ReactNode
+> = {
+  Completed: (
+    <CheckCircledIcon className="text-[#005A4E] dark:text-[#DBF9FF] bg-inherit ml-4 h-4 w-4" />
+  ),
+  "In Progress": (
+    <UpdateIcon className="text-[#005A4E] dark:text-[#DBF9FF] bg-inherit ml-4 h-4 w-4" />
+  ),
+  "To Do": (
+    <CircleIcon className="text-[#005A4E] dark:text-[#DBF9FF] bg-inherit ml-4 h-4 w-4" />
+  ),
+};
 
 export function GoalCard({ goal }: { goal: Doc<"goals"> }) {
   return (
@@ -20,8 +39,15 @@ export function GoalCard({ goal }: { goal: Doc<"goals"> }) {
       <div className="py-4">
         <Stack direction="row" className="mx-4" align="center">
           <p className="w-2/5">{goal.title}</p>
-          <p className="w-1/12">{goal.status}</p>
-          <p className="w-1/12">{goal.priority}</p>
+          <p className="w-1/12">
+            {goal.status}{" "}
+            {progressStatusIcon[goal.status as progressStatusValuesMap]}{" "}
+          </p>
+          <Chip
+            label={goal.priority as ResultValuesMap}
+            variant={"outlined"}
+            width="w-1/12"
+          />
           <p className="w-1/12">
             {formatUTCDateToDateString(goal._creationTime)}
           </p>
