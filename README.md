@@ -192,7 +192,7 @@ This project utilizes several key technologies. Below are links to the official 
 - [**Prettier**](https://prettier.io/docs/en/index.html) – A code formatter to ensure consistent style across the codebase.
 - [**Docker**](https://docs.docker.com/get-started/) – A platform for developing, shipping, and running applications in containers, ensuring consistency across development environments.
 - [**Docker Compose**](https://docs.docker.com/compose/) – A tool for defining and running multi-container Docker applications, used to manage the project environment.
-- [**Shadcn UI**](https://shadcn.dev/) – A component library for building accessible React components with Tailwind CSS.
+- [**Shadcn UI**](https://ui.shadcn.com/) – A component library for building accessible React components with Tailwind CSS.
 - [**Convex**](https://docs.convex.dev/) – A backend framework for building real-time applications with React, handling state, data sync, and more.
 - [**Node.js**](https://nodejs.org/en/docs/) – The JavaScript runtime used to run the server-side code.
 - [**NPM**](https://docs.npmjs.com/) – The package manager for JavaScript, used to manage dependencies.
