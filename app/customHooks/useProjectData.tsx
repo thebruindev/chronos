@@ -18,6 +18,10 @@ const useProjectData = () => {
     projectId: validProjectId as Id<"projects">,
   });
 
+  const tasks = useQuery(api.tasks.getTasksWithGoals, {
+    projectId: validProjectId as Id<"projects">
+  })
+
   // Query for project by ID
   const project = useQuery(
     api.projects.getProjectById, // Always pass the query function
@@ -28,6 +32,7 @@ const useProjectData = () => {
   return {
     validProjectId,
     goals,
+    tasks,
     project,
   };
 };

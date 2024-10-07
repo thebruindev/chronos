@@ -21,16 +21,18 @@ export default defineSchema({
   }),
   tasks: defineTable({
     title: v.string(),
+    issueKey: v.string(),
     description: v.string(),
     priority: v.string(),
     category: v.string(),
     complexity: v.union(
-      v.literal("simple"),
-      v.literal("medium"),
-      v.literal("complex")
+      v.literal("Simple"),
+      v.literal("Medium"),
+      v.literal("Complex")
     ),
     status: v.string(),
-    daysEstimation: v.number(),
+    daysEstimation: v.optional(v.number()),
+    completedAt: v.optional(v.string()),
     goalId: v.id("goals"),
     projectId: v.id("projects"),
     lastUpdatedAt: v.optional(v.string()),
@@ -39,5 +41,25 @@ export default defineSchema({
     projectId: v.id("projects"),
     taskId: v.id("tasks"),
     addedAt: v.string()
+  }),
+  sprints: defineTable({
+    title: v.string(),
+    description: v.optional(v.string()),
+    startDate: v.string(),
+    endDate: v.string(),
+    status: v.union(
+      v.literal("Planned"),
+      v.literal("Active"),
+      v.literal("Completed")
+    ),
+    projectId: v.id("projects"), // Association with a project
+    createdAt: v.string(), // Sprint creation timestamp
+    lastUpdatedAt: v.optional(v.string()) // For tracking updates
+  }).index('by_projectId', ['projectId']), // Index to retrieve sprints by project
+  
+  sprintTasks: defineTable({ // Association table between sprints and tasks
+    sprintId: v.id("sprints"),
+    taskId: v.id("tasks"),
+    assignedAt: v.string(), 
   })
 });
