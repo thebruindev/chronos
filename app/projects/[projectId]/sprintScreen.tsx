@@ -3,7 +3,7 @@
 import React from "react";
 import TaskStatusColumnItem from "./taskStatusColumnItem";
 import Stack from "@/components/stack";
-import useProjectData from "./useProjectDatat";
+import useProjectData from "@/app/customHooks/useProjectData";
 
 export default function SprintScreen() {
   const { project } = useProjectData()
@@ -19,10 +19,10 @@ export default function SprintScreen() {
 
       <div className="py-4 grid grid-cols-12 gap-4 h-screen">
         <div className="col-span-12 grid grid-cols-4 gap-4">
-          <TaskStatusColumnItem key={"todo"} name="TO DO" />
-          <TaskStatusColumnItem key={"in_progress"} name="IN PROGRESS" />
-          <TaskStatusColumnItem key={"in_validation"} name="IN VALIDATION" />
-          <TaskStatusColumnItem key={"done"} name="DONE" />
+          <TaskStatusColumnItem key={"todo"} name="To Do" />
+          <TaskStatusColumnItem key={"in_progress"} name="In Progress" />
+          <TaskStatusColumnItem key={"in_validation"} name="In Validation" />
+          <TaskStatusColumnItem key={"done"} name="Done" />
         </div>
       </div>
     </div>

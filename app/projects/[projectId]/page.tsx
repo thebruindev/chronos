@@ -12,6 +12,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import GoalScreen from "./goalScreen";
 import SprintScreen from "./sprintScreen";
+import TaskScreen from "@/app/tasks/taskScreen";
 
 export default function Page() {
   const router = useRouter();
@@ -68,7 +69,7 @@ export default function Page() {
             <GoalScreen />
           </TabsContent>
           <TabsContent value="tasks">
-            <h1>tasks</h1>
+            <TaskScreen />
           </TabsContent>
           <TabsContent value="insights">
             <h1>Insights</h1>
