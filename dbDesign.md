@@ -119,3 +119,7 @@ TODO: when clicking on a project, right now we get all the goals but eventually 
 TODO: add a graphs that shows you insight on the tasks that you completed in time, what you are late about
 
 
+A task card comes in two forms: 
+    1- a thin card containing just the ticket identifier, the title and the goal it belongs to. - backlog screen
+    2 - a bigger card containing more info -> sprint screen
+
