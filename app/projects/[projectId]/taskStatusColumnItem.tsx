@@ -4,6 +4,7 @@ import { Id } from "@/convex/_generated/dataModel";
 import { useQuery } from "convex/react";
 import {
   BookHeadphones,
+  Bug,
   Database,
   LayoutDashboard,
   Mail,
@@ -20,6 +21,8 @@ export type TaskCategoryValueUnion =
   | "Email"
   | "Learning"
   | "Feature"
+  | "Bug"
+
 
 export const taskCategoryIcon: Record<TaskCategoryValueUnion, React.ReactNode> =
   {
@@ -43,6 +46,9 @@ export const taskCategoryIcon: Record<TaskCategoryValueUnion, React.ReactNode> =
 
     Feature: (
       <Rocket className="text-[#FB7185] bg-inherit ml-4 h-4 w-4 font-bold" />
+    ),
+    Bug: (
+      <Bug  className="text-[#FB7185] bg-inherit ml-4 h-4 w-4 font-bold"/>
     )
   };
 
