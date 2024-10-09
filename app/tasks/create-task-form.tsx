@@ -27,12 +27,12 @@ export function CreateTaskButton(props: {
           Upload Task
         </Button>
       </DialogTrigger>
-      <DialogContent className=" ">
+      <DialogContent className="max-w-fit">
         <DialogHeader>
           <DialogTitle>
             {props.action === "create" ? "Upload" : "Update"} a task
           </DialogTitle>
-          <DialogDescription className="">
+          <DialogDescription >
             Upload a task for you to search over in the future.
           </DialogDescription>
           <UploadTaskForm

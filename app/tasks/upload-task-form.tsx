@@ -27,6 +27,8 @@ import {
 import useProjectData from "../customHooks/useProjectData";
 import Stack from "@/components/stack";
 import { Textarea } from "@/components/ui/textarea";
+import { TaskWithGoal } from "@/convex/tasks";
+import { Divide } from "lucide-react";
 
 const taskFormSchema = z.object({
   title: z.string().min(1).max(520),
@@ -52,9 +54,9 @@ type FormSchema = z.infer<typeof taskFormSchema>;
 
 interface UploadGoalFormProps {
   goal?: Doc<"goals">;
-  task?: Doc<"tasks">;
+  task?: TaskWithGoal;
   onUpload: () => void;
-  action: "create" | "update"; 
+  action: "create" | "update";
 }
 
 const taskStatusValues: Record<string, string> = {
@@ -84,8 +86,7 @@ export function UploadTaskForm({
   const { project, goals } = useProjectData();
 
   const createTask = useMutation(api.tasks.createTask);
-
-  
+  const updateTaskById = useMutation(api.tasks.updateTaskById);
   const form = useForm<FormSchema>({
     resolver: zodResolver(taskFormSchema),
     defaultValues: {
@@ -109,11 +110,30 @@ export function UploadTaskForm({
     console.log("Action:", action);
 
     try {
-      await createTask({
-        ...values,
-        projectId: validProjectId,
-        goalId: validGoalId,
-      });
+      if (action === "create") {
+        await createTask({
+          ...values,
+          projectId: validProjectId,
+          goalId: validGoalId,
+        });
+      } else if (action === "update" && task) {
+        await updateTaskById({
+          taskId: task._id as Id<"tasks">,
+          taskObjectToUpdate: {
+            title: values.title,
+            issueKey: values.issueKey,
+            description: values.description,
+            status: values.status,
+            priority: values.priority,
+            category: values.category,
+            complexity: values.complexity,
+            daysEstimation: values.daysEstimation,
+            goalId: task.goalId as Id<"goals">,
+            lastUpdatedAt: values.lastUpdatedAt,
+            projectId: task.projectId as Id<"projects">,
+          },
+        });
+      }
     } catch (error) {
       // Trigger the callback function after successful upload
 
@@ -124,227 +144,252 @@ export function UploadTaskForm({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(useSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(useSubmit)} className="w-max">
         {/* Goal Field */}
-        <Stack direction="row">
+        <Stack direction="row" className="py-4">
           {/* Issuekey Field */}
-          <div className="w-6/12">
-            <FormField
-              control={form.control}
-              name="issueKey"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Issue Key</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Ex: CRN-101" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            {/* Title Field */}
-            <FormField
-              control={form.control}
-              name="title"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Title</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Ex: Frontend Refactor" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            {/* Category Field */}
-            <FormField
-              control={form.control}
-              name="category"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Category</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Ex: top-priority" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            {/* Description Field */}
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Description</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="description of the task"
-                      className="resize-none"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          <div className=" w-1/2">
+            <Stack direction="row">
+              <FormField
+                control={form.control}
+                name="issueKey"
+                render={({ field }) => (
+                  <FormItem className="w-64">
+                    <FormLabel>Issue Key</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Ex: CRN-101" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              {/* Title Field */}
+              <FormField
+                control={form.control}
+                name="title"
+                render={({ field }) => (
+                  <FormItem className="w-64">
+                    <FormLabel>Title</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Ex: Frontend Refactor" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </Stack>
+            <div className=" py-6  w-full">
+              {/* Description Field */}
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Description</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="description of the task"
+                        className="resize-none h-52"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
           </div>
-          <div className="w-6/12">
-            {" "}
-            {/* Status Field */}
-            <FormField
-              control={form.control}
-              name="status"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Status</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a status" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {Object.entries(taskStatusValues).map(([key, value]) => (
-                        <SelectItem key={key} value={value}>
-                          {value}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormDescription>
-                    You can update the complexity later on
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            {/* Priority Field */}
-            <FormField
-              control={form.control}
-              name="priority"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Priority</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a priority" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {Object.entries(taskPriorityValues).map(
-                        ([key, value]) => (
-                          <SelectItem key={key} value={value}>
-                            {value}
-                          </SelectItem>
-                        )
-                      )}
-                    </SelectContent>
-                  </Select>
-                  <FormDescription>
-                    You can update the priority later on
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            {/* Complexity Field */}
-            <FormField
-              control={form.control}
-              name="complexity"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Complexity</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a complexity for this task" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {Object.entries(taskComplexityValues).map(
-                        ([key, value]) => (
-                          <SelectItem key={key} value={value}>
-                            {value}
-                          </SelectItem>
-                        )
-                      )}
-                    </SelectContent>
-                  </Select>
-                  <FormDescription>
-                    You can update the complexity later on
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            {/* Days Estimation Field */}
-            <FormField
-              control={form.control}
-              name="daysEstimation"
-              render={() => (
-                <FormItem>
-                  <FormLabel>Days Estimation</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      placeholder="1"
-                      {...form.register("daysEstimation", {
-                        setValueAs: (value) =>
-                          value === "" ? undefined : parseInt(value, 10),
-                      })}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="goalId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Goal</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a goal" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {goals &&
-                        goals.map((g) => (
-                          <SelectItem key={g._id} value={g._id}>
-                            {g.title}
-                          </SelectItem>
-                        ))}
-                    </SelectContent>
-                  </Select>
 
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          <div className="flex justify-center items-center">
+  <div className="mx-8 h-full w-px bg-[#05201D] dark:bg-[#57E1C0]"></div>
+</div>
+
+
+          <div className=" w-1/2">
+            <Stack direction="row">
+              {" "}
+              {/* Status Field */}
+              <FormField
+                control={form.control}
+                name="status"
+                render={({ field }) => (
+                  <FormItem className="w-64">
+                    <FormLabel>Status</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a status" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {Object.entries(taskStatusValues).map(
+                          ([key, value]) => (
+                            <SelectItem key={key} value={value}>
+                              {value}
+                            </SelectItem>
+                          )
+                        )}
+                      </SelectContent>
+                    </Select>
+                    <FormDescription>
+                      You can update the complexity later on
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              {/* Priority Field */}
+              <FormField
+                control={form.control}
+                name="priority"
+                render={({ field }) => (
+                  <FormItem className="w-64">
+                    <FormLabel>Priority</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a priority" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {Object.entries(taskPriorityValues).map(
+                          ([key, value]) => (
+                            <SelectItem key={key} value={value}>
+                              {value}
+                            </SelectItem>
+                          )
+                        )}
+                      </SelectContent>
+                    </Select>
+                    <FormDescription>
+                      You can update the priority later on
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </Stack>
+            <Stack direction="row">
+              <FormField
+                control={form.control}
+                name="complexity"
+                render={({ field }) => (
+                  <FormItem className="w-64">
+                    <FormLabel>Complexity</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a complexity for this task" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {Object.entries(taskComplexityValues).map(
+                          ([key, value]) => (
+                            <SelectItem key={key} value={value}>
+                              {value}
+                            </SelectItem>
+                          )
+                        )}
+                      </SelectContent>
+                    </Select>
+                    <FormDescription>
+                      You can update the complexity later on
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Category Field */}
+              <FormField
+                control={form.control}
+                name="category"
+                render={({ field }) => (
+                  <FormItem className="w-64">
+                    <FormLabel>Category</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Ex: top-priority" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </Stack>
+            <div className=" py-4">
+              <Stack direction="row">
+                {/* Days Estimation Field */}
+                <FormField
+                  control={form.control}
+                  name="daysEstimation"
+                  render={() => (
+                    <FormItem className="w-64">
+                      <FormLabel>Days Estimation</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          placeholder="1"
+                          {...form.register("daysEstimation", {
+                            setValueAs: (value) =>
+                              value === "" ? undefined : parseInt(value, 10),
+                          })}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="goalId"
+                  render={({ field }) => (
+                    <FormItem className="w-64">
+                      <FormLabel>Goal</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a goal" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {goals &&
+                            goals.map((g) => (
+                              <SelectItem key={g._id} value={g._id}>
+                                {g.title}
+                              </SelectItem>
+                            ))}
+                        </SelectContent>
+                      </Select>
+
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </Stack>
+            </div>
           </div>
         </Stack>
 
         {/* Submit Button */}
-        <Button type="submit" variant={"teal"}>
-          {action === "create" ? "Create Goal" : "Update Goal"}
-        </Button>
+        <Stack direction="row" justify="flex-end">
+          <Button variant={"teal-outline"} onClick={onUpload}>
+            Cancel
+          </Button>
+          <Button type="submit" variant={"teal"}>
+            {action === "create" ? "Create Goal" : "Update Goal"}
+          </Button>
+        </Stack>
       </form>
     </Form>
   );

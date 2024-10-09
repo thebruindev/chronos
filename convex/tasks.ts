@@ -157,7 +157,7 @@ export const getTaskById = query({
 });
 
 export const updateTaskById = mutation({
-  args: { taskId: v.id("tasks"), taskObjectToUpdate },
+  args: { taskId: v.id("tasks"), taskObjectToUpdate: taskObjectToUpdate },
   async handler(ctx, args) {
     {
       const { taskObjectToUpdate } = args;
