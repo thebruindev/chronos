@@ -1,16 +1,16 @@
 import React from "react";
 
 export type ChipColor = "default" | "success" | "info" | "warning" | "error";
-export type ResultValuesMap = "High" | "Low" | "Medium";
+export type PriorityValuesMap = "High" | "Low" | "Medium";
 
-export const chipSeverity: Record<ResultValuesMap, string> = {
+export const chipSeverity: Record<PriorityValuesMap, string> = {
   High: "rgb(251 113 133)", // Red for High (Danger)
   Low: "rgb(34 211 238)", // Blue for Low (Info)
   Medium: "rgb(251 146 60)", // Orange for Medium (Warning)
 };
 
 export default function Chip(props: {
-  label: ResultValuesMap;
+  label: PriorityValuesMap;
   onClick?: () => void;
   onDelete?: () => void;
   icon?: React.ReactNode;

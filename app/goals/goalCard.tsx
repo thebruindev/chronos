@@ -3,25 +3,10 @@ import { Doc } from "@/convex/_generated/dataModel";
 import { formatUTCDateToDateString } from "@/utils/dates";
 import { UpdateGoalButton } from "./update-goal-button";
 import { DeleteGoalButton } from "./delete-goal-button";
-import Chip, { ResultValuesMap } from "@/components/chip";
-import { CheckCircledIcon, UpdateIcon, CircleIcon } from "@radix-ui/react-icons";
+import Chip, { PriorityValuesMap } from "@/components/chip";
+import { progressStatusIcon, progressStatusValuesMap } from "@/utils/cardIcons";
 
-export type progressStatusValuesMap = "Completed" | "In Progress" | "To Do";
 
-export const progressStatusIcon: Record<
-  progressStatusValuesMap,
-  React.ReactNode
-> = {
-  Completed: (
-    <CheckCircledIcon className="text-[#11C99D] bg-inherit ml-4 h-4 w-4 font-bold" />
-  ),
-  "In Progress": (
-    <UpdateIcon className="text-[#FB923C] bg-inherit ml-4 h-4 w-4 font-bold"/>
-  ),
-  "To Do": (
-    <CircleIcon className="text-[#FB7185] bg-inherit ml-4 h-4 w-4 font-bold" />
-  ),
-};
 
 export function GoalCard({ goal }: { goal: Doc<"goals"> }) {
   return (
@@ -36,7 +21,7 @@ export function GoalCard({ goal }: { goal: Doc<"goals"> }) {
             {progressStatusIcon[goal.status as progressStatusValuesMap]}{" "}
           </p>
           <Chip
-            label={goal.priority as ResultValuesMap}
+            label={goal.priority as PriorityValuesMap}
             variant={"outlined"}
             width="w-1/12"
           />
