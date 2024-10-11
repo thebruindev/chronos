@@ -1,9 +1,9 @@
 "use client";
 
 import React from "react";
-import TaskStatusColumnItem from "./taskStatusColumnItem";
 import Stack from "@/components/stack";
 import useProjectData from "@/app/customHooks/useProjectData";
+import TaskStatusColumnItem from "@/app/tasks/taskStatusColumnItem";
 
 export default function SprintScreen() {
   const { project } = useProjectData()

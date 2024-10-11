@@ -1,5 +1,5 @@
 import { mutation, query } from "./_generated/server";
-import { Infer, v } from "convex/values";
+import { ConvexError, Infer, v } from "convex/values";
 
 export const projectObject = v.object({
   title: v.string(),
@@ -13,7 +13,7 @@ export const getProjects = query({
   async handler(ctx) {
     const userId = (await ctx.auth.getUserIdentity())?.tokenIdentifier;
     if (!userId) {
-      return []
+      return [];
     }
 
     return await ctx.db
@@ -26,7 +26,17 @@ export const getProjects = query({
 export const getProjectById = query({
   args: { projectId: v.id("projects") },
   async handler(ctx, args) {
-    return await ctx.db.get(args.projectId);
+    const { projectId } = args;
+    if (!projectId) {
+      throw new ConvexError("No project Id provided, cannot fetch project");
+    }
+
+    try {
+      return await ctx.db.get(args.projectId);
+    } catch (error) {
+      console.log("An error occured: ", error);
+      throw new ConvexError("Failed to fetch project");
+    }
   },
 });
 
@@ -37,11 +47,22 @@ export const createProject = mutation({
     if (!userId) {
       throw new Error("Unauthenticated call to mutation");
     }
-    await ctx.db.insert("projects", {
-      title: args.title,
-      description: args.description,
-      lastUpdatedAt: args.lastUpdatedAt,
-      tokenIdentifier: userId,
-    });
+
+    try {
+      const createdProject = await ctx.db.insert("projects", {
+        title: args.title,
+        description: args.description,
+        lastUpdatedAt: args.lastUpdatedAt,
+        tokenIdentifier: userId,
+      });
+      console.info({
+        message: "New project created",
+        success: true,
+        project: createdProject,
+      });
+    } catch (error) {
+      console.error("An error occured: ", error);
+      throw new ConvexError("Unable to create project");
+    }
   },
 });

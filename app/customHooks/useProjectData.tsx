@@ -3,7 +3,6 @@ import { Id } from "@/convex/_generated/dataModel";
 import { useQuery } from "convex/react";
 import { useParams } from "next/navigation";
 
-// Define your custom hook
 const useProjectData = () => {
   const { projectId } = useParams();
 
