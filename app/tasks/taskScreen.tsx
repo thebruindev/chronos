@@ -8,9 +8,7 @@ import { TaskCard } from "./taskCard";
 
 export default function TaskScreen() {
   const { goals, project, tasks } = useProjectData();
-
-  console.log('tasks are ====>', tasks)
-
+  
   return (
     <div className="py-6 mx-4">
       {project ? (

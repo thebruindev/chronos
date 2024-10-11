@@ -2,55 +2,11 @@ import Stack from "@/components/stack";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { useQuery } from "convex/react";
-import {
-  BookHeadphones,
-  Bug,
-  Database,
-  LayoutDashboard,
-  Mail,
-  Rocket,
-  Wrench,
-} from "lucide-react";
 import { useParams } from "next/navigation";
 import React from "react";
-
-export type TaskCategoryValueUnion =
-  | "Refactor"
-  | "Frontend"
-  | "Database"
-  | "Email"
-  | "Learning"
-  | "Feature"
-  | "Bug"
+import { taskCategoryIcon, TaskCategoryValueUnion } from "./tasksUtils";
 
 
-export const taskCategoryIcon: Record<TaskCategoryValueUnion, React.ReactNode> =
-  {
-    Refactor: (
-      <Wrench className="text-[#11C99D] bg-inherit ml-4 h-4 w-4 font-bold" />
-    ),
-    Frontend: (
-      <LayoutDashboard className="text-[#FB923C] bg-inherit ml-4 h-4 w-4 font-bold" />
-    ),
-    Database: (
-      <Database className="text-[#FB7185] bg-inherit ml-4 h-4 w-4 font-bold" />
-    ),
-
-    Email: (
-      <Mail className="text-[#FB7185] bg-inherit ml-4 h-4 w-4 font-bold" />
-    ),
-
-    Learning: (
-      <BookHeadphones className="text-[#FB7185] bg-inherit ml-4 h-4 w-4 font-bold" />
-    ),
-
-    Feature: (
-      <Rocket className="text-[#FB7185] bg-inherit ml-4 h-4 w-4 font-bold" />
-    ),
-    Bug: (
-      <Bug  className="text-[#FB7185] bg-inherit ml-4 h-4 w-4 font-bold"/>
-    )
-  };
 
 export default function TaskStatusColumnItem(props: { name: string }) {
   const { projectId } = useParams();
@@ -84,8 +40,7 @@ export default function TaskStatusColumnItem(props: { name: string }) {
                     {taskCategoryIcon[task.category as TaskCategoryValueUnion]}
                   </div>
                 </Stack>
-                <p>{task.description}</p>
-                <p>{task.status}</p>
+                <p>{task.title}</p>
               </div>
             ))}
           </>

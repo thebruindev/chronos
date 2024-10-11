@@ -1,23 +1,15 @@
 import {
-  CheckCircledIcon,
   UpdateIcon,
   CircleIcon,
 } from "@radix-ui/react-icons";
 import { CircleCheckBig } from "lucide-react";
 
-export type progressStatusValuesMap =
-  | "Completed"
-  | "In Progress"
-  | "To Do"
-  | "Done";
+export type progressStatusValuesMap = "In Progress" | "To Do" | "Done";
 
 export const progressStatusIcon: Record<
   progressStatusValuesMap,
   React.ReactNode
 > = {
-  Completed: (
-    <CheckCircledIcon className="text-[#11C99D] bg-inherit ml-4 h-4 w-4 font-bold" />
-  ),
   "In Progress": (
     <UpdateIcon className="text-[#FB923C] bg-inherit ml-4 h-4 w-4 font-bold" />
   ),

@@ -10,9 +10,9 @@ import {
   InfoCircledIcon,
 } from "@radix-ui/react-icons";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import GoalScreen from "./goalScreen";
 import SprintScreen from "./sprintScreen";
 import TaskScreen from "@/app/tasks/taskScreen";
+import GoalScreen from "@/app/goals/goalScreen";
 
 export default function Page() {
   const router = useRouter();

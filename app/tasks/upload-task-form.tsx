@@ -28,7 +28,7 @@ import useProjectData from "../customHooks/useProjectData";
 import Stack from "@/components/stack";
 import { Textarea } from "@/components/ui/textarea";
 import { TaskWithGoal } from "@/convex/tasks";
-import { Divide } from "lucide-react";
+import { TaskCategoryValueUnion } from "./tasksUtils";
 
 const taskFormSchema = z.object({
   title: z.string().min(1).max(520),
@@ -77,6 +77,17 @@ const taskComplexityValues: Record<string, string> = {
   medium: "Medium",
   complex: "Complex",
 };
+
+const taskCategoryValues: Record<string, TaskCategoryValueUnion> = {
+  refactor: "Refactor",
+  frontend: "Frontend",
+  database: "Database",
+  email: "Email",
+  learning: "Learning",
+  feature: "Feature",
+  bug: "Bug",
+  test: "Test",
+};
 export function UploadTaskForm({
   onUpload,
   goal,
@@ -93,7 +104,7 @@ export function UploadTaskForm({
       title: task?.title || "",
       issueKey: task?.issueKey,
       description: task?.description || "",
-      category: task?.status || "",
+      category: task?.category || "",
       complexity: task?.complexity,
       status: task?.status || "",
       priority: task?.priority || "",
@@ -201,9 +212,8 @@ export function UploadTaskForm({
           </div>
 
           <div className="flex justify-center items-center">
-  <div className="mx-8 h-full w-px bg-[#05201D] dark:bg-[#57E1C0]"></div>
-</div>
-
+            <div className="mx-8 h-full w-px bg-[#05201D] dark:bg-[#57E1C0]"></div>
+          </div>
 
           <div className=" w-1/2">
             <Stack direction="row">
@@ -316,9 +326,28 @@ export function UploadTaskForm({
                 render={({ field }) => (
                   <FormItem className="w-64">
                     <FormLabel>Category</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Ex: top-priority" {...field} />
-                    </FormControl>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a category for this task" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {Object.entries(taskCategoryValues).map(
+                          ([key, value]) => (
+                            <SelectItem key={key} value={value}>
+                              {value}
+                            </SelectItem>
+                          )
+                        )}
+                      </SelectContent>
+                    </Select>
+                    <FormDescription>
+                      You can update the category later on
+                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -383,7 +412,7 @@ export function UploadTaskForm({
 
         {/* Submit Button */}
         <Stack direction="row" justify="flex-end">
-          <Button variant={"teal-outline"} onClick={onUpload}>
+          <Button variant={"teal-outline"} onClick={onUpload} type="button">
             Cancel
           </Button>
           <Button type="submit" variant={"teal"}>
